@@ -17,7 +17,7 @@ use Knp\Component\Pager\PaginatorInterface;
  */
 class ProjectRepository extends ServiceEntityRepository
 {
-    const LIMIT = 10;
+    const LIMIT = 1;
 
     public function __construct(
         ManagerRegistry $registry,

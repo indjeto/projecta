@@ -7,6 +7,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Ignore;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
 class Project implements SoftDeletableInterface
@@ -19,6 +21,7 @@ class Project implements SoftDeletableInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT)]
@@ -76,13 +79,6 @@ class Project implements SoftDeletableInterface
     public function getStatus(): Status
     {
         return $this->status;
-    }
-
-    public function setStatus(Status $status): self
-    {
-        $this->status = $status;
-
-        return $this;
     }
 
     public function getDuration(): int
