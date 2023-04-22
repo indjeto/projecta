@@ -22,20 +22,15 @@ class Task implements SoftDeletableInterface
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
-    #[ORM\Column(type: Types::SMALLINT)]
-    private ?int $status = null;
+    #[ORM\Column(type: Types::SMALLINT, enumType: Status::class)]
+    private Status $status = Status::New;
 
     #[ORM\Column]
-    private ?\DateInterval $duration = null;
+    private int $duration = 0;
 
     #[ORM\ManyToOne(inversedBy: 'tasks')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn]
     private ?Project $project = null;
-
-    public function __construct()
-    {
-        $this->duration = new \DateInterval("P0D");
-    }
 
     public function getId(): ?int
     {
@@ -66,26 +61,28 @@ class Task implements SoftDeletableInterface
         return $this;
     }
 
-    public function getStatus(): ?int
+    public function getStatus(): Status
     {
         return $this->status;
     }
 
-    public function setStatus(int $status): self
+    public function setStatus(Status $status): self
     {
         $this->status = $status;
 
         return $this;
     }
 
-    public function getDuration(): ?\DateInterval
+    public function getDuration(): int
     {
         return $this->duration;
     }
 
-    public function setDuration(\DateInterval $duration): self
+    public function setDuration(int $duration): self
     {
         $this->duration = $duration;
+
+        $this->project->recalcDuration();
 
         return $this;
     }

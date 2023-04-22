@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Project;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Knp\Component\Pager\PaginatorInterface;
 
 /**
  * @extends ServiceEntityRepository<Project>
@@ -16,7 +17,11 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ProjectRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    const LIMIT = 10;
+
+    public function __construct(
+        ManagerRegistry $registry,
+        protected PaginatorInterface $paginator)
     {
         parent::__construct($registry, Project::class);
     }
@@ -37,6 +42,20 @@ class ProjectRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    public function getPaginated(int $page)
+    {
+        $query = $this->createQueryBuilder('p')
+//            ->andWhere('p.exampleField = :val')
+//            ->setParameter('val', $value)
+            ->orderBy('p.id', 'ASC')
+//            ->setMaxResults(10)
+            ->getQuery();
+
+        $pagination = $this->paginator->paginate($query, $page, self::LIMIT);
+
+        return $pagination;
     }
 
 //    /**

@@ -24,11 +24,11 @@ class Project implements SoftDeletableInterface
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
-    #[ORM\Column(type: Types::SMALLINT)]
-    private ?int $status = null;
+    #[ORM\Column(type: Types::SMALLINT, enumType: Status::class)]
+    private Status $status = Status::New;
 
     #[ORM\Column]
-    private ?\DateInterval $duration = null;
+    private int $duration = 0;
 
     #[ORM\Column(length: 255)]
     private ?string $client = null;
@@ -41,7 +41,6 @@ class Project implements SoftDeletableInterface
 
     public function __construct()
     {
-        $this->duration = new \DateInterval("P0D");
         $this->tasks = new ArrayCollection();
     }
 
@@ -74,26 +73,32 @@ class Project implements SoftDeletableInterface
         return $this;
     }
 
-    public function getStatus(): ?int
+    public function getStatus(): Status
     {
         return $this->status;
     }
 
-    public function setStatus(int $status): self
+    public function setStatus(Status $status): self
     {
         $this->status = $status;
 
         return $this;
     }
 
-    public function getDuration(): ?\DateInterval
+    public function getDuration(): int
     {
         return $this->duration;
     }
 
-    public function setDuration(\DateInterval $duration): self
+    public function recalcDuration(): self
     {
-        $this->duration = $duration;
+        //$this->duration = array_sum(array_map(fn(Task $task) => $task->getDuration(), $this->tasks->toArray()));
+
+        $sum = 0;
+        foreach ($this->getTasks() as $task) {
+            $sum += $task->getDuration();
+        }
+        $this->duration = $sum;
 
         return $this;
     }
@@ -135,6 +140,8 @@ class Project implements SoftDeletableInterface
         if (!$this->tasks->contains($task)) {
             $this->tasks->add($task);
             $task->setProject($this);
+
+            $this->recalcDuration();
         }
 
         return $this;
@@ -147,6 +154,8 @@ class Project implements SoftDeletableInterface
             if ($task->getProject() === $this) {
                 $task->setProject(null);
             }
+
+            $this->recalcDuration();
         }
 
         return $this;
