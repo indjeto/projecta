@@ -157,4 +157,9 @@ class Project implements SoftDeletableInterface
 
         return $this;
     }
+
+    public function __toString(): string
+    {
+        return substr($this->title, 0, 20);
+    }
 }

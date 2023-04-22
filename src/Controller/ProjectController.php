@@ -17,18 +17,10 @@ class ProjectController extends AbstractController
     #[Route('/', name: 'app_project_index', methods: ['GET'])]
     public function index(ProjectRepository $projectRepository, Request $request, PaginatorInterface $paginator): Response
     {
-
         $pagination = $projectRepository->getPaginated($request->query->getInt('page', 1));
 
-        if ($request->getRequestFormat() == 'html') {
-            return $this->render('project/index.html.twig', [
-                'pagination' => $pagination,
-            ]);
-        }
-
-        return $this->json([
-            'total' => $pagination->getTotalItemCount(),
-            'items' => $pagination->getItems(),
+        return $this->render('project/index.html.twig', [
+            'pagination' => $pagination,
         ]);
     }
 

@@ -84,7 +84,7 @@ class Task implements SoftDeletableInterface
     {
         $this->duration = $duration;
 
-        $this->project->recalcDuration();
+        $this->project?->recalcDuration();
 
         return $this;
     }
@@ -96,7 +96,17 @@ class Task implements SoftDeletableInterface
 
     public function setProject(?Project $project): self
     {
+        if ($this->project === $project) {
+            return $this;
+        }
+
+        $oldProject = $this->project;
+
         $this->project = $project;
+
+        $oldProject?->recalcDuration();
+
+        $this->project?->recalcDuration();
 
         return $this;
     }

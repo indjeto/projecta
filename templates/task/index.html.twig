@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Task index{% endblock %}
+
+{% block body %}
+    <h1>Task index</h1>
+
+    {% include 'task/_list.html.twig' with {'pagination': pagination} %}
+
+    <div class="navigation">
+        {{ knp_pagination_render(pagination) }}
+    </div>
+
+    <a href="{{ path('app_task_new') }}">Create new</a>
+{% endblock %}
