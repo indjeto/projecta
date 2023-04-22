@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Project;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Knp\Component\Pager\Pagination\PaginationInterface;
 use Knp\Component\Pager\PaginatorInterface;
 
 /**
@@ -17,7 +18,7 @@ use Knp\Component\Pager\PaginatorInterface;
  */
 class ProjectRepository extends ServiceEntityRepository
 {
-    const LIMIT = 1;
+    const LIMIT = 2;
 
     public function __construct(
         ManagerRegistry $registry,
@@ -37,49 +38,16 @@ class ProjectRepository extends ServiceEntityRepository
 
     public function remove(Project $entity, bool $flush = false): void
     {
-        $this->getEntityManager()->remove($entity);
-
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
+        $entity->setDeleted(true);
+        $this->save($entity, $flush);
     }
 
-    public function getPaginated(int $page)
+    public function getPaginated(int $page): PaginationInterface
     {
         $query = $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
             ->orderBy('p.id', 'ASC')
-//            ->setMaxResults(10)
             ->getQuery();
 
-        $pagination = $this->paginator->paginate($query, $page, self::LIMIT);
-
-        return $pagination;
+        return $this->paginator->paginate($query, $page, self::LIMIT);
     }
-
-//    /**
-//     * @return Project[] Returns an array of Project objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('p.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?Project
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
 }

@@ -11,7 +11,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
-#[Gedmo\SoftDeleteable(fieldName: 'deletedAt', hardDelete: false)]
+#[Gedmo\SoftDeleteable(hardDelete: false)]
 class Project implements SoftDeletableInterface
 {
     use SoftDeleteTrait;

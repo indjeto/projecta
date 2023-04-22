@@ -73,8 +73,7 @@ class ProjectController extends AbstractFOSRestController
     #[Route('/{id}', name: 'api_project_delete', methods: ['DELETE'])]
     public function delete(Request $request, Project $project, ProjectRepository $projectRepository): Response
     {
-        $project->setDeleted(true);
-        $projectRepository->save($project, true);
+        $projectRepository->remove($project, true);
 
         $view = $this->view(['status' => 0], 200);
 
