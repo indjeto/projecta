@@ -41,7 +41,7 @@ class ProjectController extends AbstractFOSRestController
             throw new ValidationViolationException($violations);
         }
 
-        $projectRepository->save($project);
+        $projectRepository->save($project, true);
 
         $view = $this->view(['status' => 0, 'data' => $project], 200);
         return $this->handleView($view);
@@ -64,7 +64,7 @@ class ProjectController extends AbstractFOSRestController
             throw new ValidationViolationException($violations);
         }
 
-        $projectRepository->save($project);
+        $projectRepository->save($project, true);
 
         $view = $this->view(['status' => 0, 'data' => $project], 200);
         return $this->handleView($view);

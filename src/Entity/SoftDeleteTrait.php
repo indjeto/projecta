@@ -7,19 +7,19 @@ use Symfony\Component\Serializer\Annotation\Ignore;
 
 trait SoftDeleteTrait
 {
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     #[Ignore]
-    private ?bool $deleted = false;
-
-    public function isDeleted(): ?bool
+    private ?\DateTimeImmutable $deletedAt = null;
+    #[Ignore]
+    public function getDeletedAt(): ?\DateTimeImmutable
     {
-        return $this->deleted;
+        return $this->deletedAt;
+    }
+    #[Ignore]
+    public function setDeleted(bool $deleted): void
+    {
+        $this->deletedAt = $deleted ? new \DateTimeImmutable() : null;
     }
 
-    public function setDeleted(bool $deleted): self
-    {
-        $this->deleted = $deleted;
 
-        return $this;
-    }
 }
