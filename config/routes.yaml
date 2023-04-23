@@ -11,3 +11,11 @@ api:
     namespace: App\Controller\Api
   type: attribute
   prefix: /api
+
+# redirecting the root
+root:
+  path: /
+  controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController
+  defaults:
+    path: /app/project
+    permanent: true
