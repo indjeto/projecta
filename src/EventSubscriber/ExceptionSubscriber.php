@@ -17,7 +17,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
         $response = [
             'code' => -1,
         ];
-throw $exception;
+
         $flatten = FlattenException::createFromThrowable($event->getThrowable());
         $response['error'] = $flatten->getMessage();
 

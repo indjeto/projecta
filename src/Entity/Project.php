@@ -9,6 +9,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
 #[Gedmo\SoftDeleteable(hardDelete: false)]
@@ -161,5 +162,15 @@ class Project implements SoftDeletableInterface
     public function __toString(): string
     {
         return substr($this->title, 0, 20);
+    }
+
+    #[Assert\Callback]
+    public function validate(ExecutionContextInterface $context, $payload): void
+    {
+        if (empty($this->getClient()) || empty($this->getCompany())) {
+            $context->buildViolation('You should populate Client or Company!')
+                ->atPath(empty($this->getClient()) ? 'client' : 'company')
+                ->addViolation();
+        }
     }
 }
