@@ -23,10 +23,10 @@ class Project implements SoftDeletableInterface
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
-    private ?string $title = null;
+    private ?string $title = '';
 
     #[ORM\Column(type: Types::TEXT)]
-    private ?string $description = null;
+    private ?string $description = '';
 
     #[ORM\Column(type: Types::SMALLINT, enumType: Status::class)]
     private Status $status = Status::New;
@@ -35,10 +35,10 @@ class Project implements SoftDeletableInterface
     private int $duration = 0;
 
     #[ORM\Column(length: 255)]
-    private ?string $client = null;
+    private ?string $client = '';
 
     #[ORM\Column(length: 255)]
-    private ?string $company = null;
+    private ?string $company = '';
 
     #[ORM\OneToMany(mappedBy: 'project', targetEntity: Task::class)]
     private Collection $tasks;

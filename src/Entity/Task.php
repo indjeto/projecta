@@ -6,6 +6,7 @@ use App\Repository\TaskRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TaskRepository::class)]
 #[Gedmo\SoftDeleteable(hardDelete: false)]
@@ -19,10 +20,11 @@ class Task implements SoftDeletableInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $title = null;
+    #[Assert\NotBlank]
+    private ?string $title ='';
 
     #[ORM\Column(type: Types::TEXT)]
-    private ?string $description = null;
+    private ?string $description = '';
 
     #[ORM\Column(type: Types::SMALLINT, enumType: Status::class)]
     private Status $status = Status::New;
