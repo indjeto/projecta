@@ -13,7 +13,7 @@ use Symfony\Component\Serializer\NameConverter\NameConverterInterface;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\PropertyInfo\PropertyTypeExtractorInterface;
 
-class TaskNormalizer extends ObjectNormalizer
+class ProjectNormalizer extends ObjectNormalizer
 {
     public function __construct(
         protected EntityManagerInterface $em,
@@ -30,7 +30,7 @@ class TaskNormalizer extends ObjectNormalizer
      */
     public function supportsDenormalization($data, $type, $format = null)
     {
-        return $type === Task::class;
+        return $type === Project::class;
     }
 
     /**
@@ -38,7 +38,7 @@ class TaskNormalizer extends ObjectNormalizer
      */
     public function supportsNormalization(mixed $data, string $format = null)
     {
-        return $data instanceof Task;
+        return $data instanceof Project;
     }
 
     /**
@@ -47,34 +47,27 @@ class TaskNormalizer extends ObjectNormalizer
     public function denormalize($data, $type, $format = null, array $context = [])
     {
         /**
-         * @var Task $task
+         * @var Project $project
          */
-        $task = isset($data['id']) ? $this->em->find($type, $data['id']) : new $type;
+        $project = isset($data['id']) ? $this->em->find($type, $data['id']) : new $type;
         if (isset($data['title'])) {
-            $task->setTitle($data['title']);
+            $project->setTitle($data['title']);
         }
         if (isset($data['description'])) {
-            $task->setDescription($data['description']);
+            $project->setDescription($data['description']);
         }
-        if (isset($data['duration'])) {
-            $task->setDuration($data['duration']);
+        if (isset($data['client'])) {
+            $project->setClient($data['client']);
         }
-        if (isset($data['status'])) {
-            $task->setStatus(Status::from($data['status']));
-        }
-        if (isset($data['project'])) {
-            $project = $this->em->find(Project::class, $data['project']);
-            if (!$project) {
-                throw new NotFoundHttpException('Project not found: '. $data['project']);
-            }
-            $task->setProject($project);
+        if (isset($data['company'])) {
+            $project->setCompany($data['company']);
         }
 
-        return $task;
+        return $project;
     }
 
     /**
-     * @param Task $object
+     * @param Project $object
      */
     public function normalize(mixed $object, string $format = null, array $context = []): array
     {
@@ -84,7 +77,8 @@ class TaskNormalizer extends ObjectNormalizer
             'description' => $object->getDescription(),
             'duration' => $object->getDuration(),
             'status' => $object->getStatus(),
-            'project' => $object->getProject()?->getId(),
+            'client' => $object->getClient(),
+            'company' => $object->getCompany(),
         ];
 
         return $data;
