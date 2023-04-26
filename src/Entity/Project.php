@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Helper\StatusCalculator;
 use App\Repository\ProjectRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -90,13 +91,21 @@ class Project implements SoftDeletableInterface
 
     public function recalcDuration(): self
     {
-        //$this->duration = array_sum(array_map(fn(Task $task) => $task->getDuration(), $this->tasks->toArray()));
-
         $sum = 0;
         foreach ($this->getTasks() as $task) {
             $sum += $task->getDuration();
         }
         $this->duration = $sum;
+
+        $this->recalcStatus();
+
+        return $this;
+    }
+
+    public function recalcStatus(): self
+    {
+        $statuses = array_map(fn(Task $task) => $task->getStatus(), $this->getTasks()->toArray());
+        $this->status = StatusCalculator::getOverallStatus(...$statuses);
 
         return $this;
     }

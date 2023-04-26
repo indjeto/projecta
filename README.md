@@ -55,5 +55,5 @@ System requirements: PHP 8.2, Symfony 6.2
    ```
   The App should be accessible on http://localhost:8000
 
-6. You can use the Postman collection to try the API.
+6. You can use the [Postman collection](Projecta.postman_collection.json) to try the API.
 
