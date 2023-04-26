@@ -148,6 +148,7 @@ class Project implements SoftDeletableInterface
             $this->tasks->add($task);
             $task->setProject($this);
 
+            $this->recalcStatus();
             $this->recalcDuration();
         }
 
@@ -162,6 +163,7 @@ class Project implements SoftDeletableInterface
                 $task->setProject(null);
             }
 
+            $this->recalcStatus();
             $this->recalcDuration();
         }
 

@@ -74,6 +74,8 @@ class Task implements SoftDeletableInterface
     {
         $this->status = $status;
 
+        $this->project?->recalcStatus();
+
         return $this;
     }
 
@@ -107,8 +109,10 @@ class Task implements SoftDeletableInterface
         $this->project = $project;
 
         $oldProject?->recalcDuration();
+        $oldProject?->recalcStatus();
 
         $this->project?->recalcDuration();
+        $this->project?->recalcStatus();
 
         return $this;
     }
