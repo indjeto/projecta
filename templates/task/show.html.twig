@@ -29,7 +29,11 @@
             </tr>
             <tr>
                 <th>Project</th>
-                <td><a href="{{ path('app_project_show', {'id': task.project.id}) }}">{{ task.project }}</a></td>
+                <td>
+                    {% if task.project %}
+                        <a href="{{ path('app_project_show', {'id': task.project.id}) }}">{{ task.project }}</a>
+                    {%  endif %}
+                </td>
             </tr>
         </tbody>
     </table>
