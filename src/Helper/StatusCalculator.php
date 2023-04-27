@@ -24,16 +24,16 @@ class StatusCalculator
             }
         }
 
+        if ($haveFailed) {
+            return Status::Failed;
+        }
+
         if (!$haveNotDone) {
             return Status::Done;
         }
 
         if (!$haveNotNew) {
             return Status::New;
-        }
-
-        if ($haveFailed) {
-            return Status::Failed;
         }
 
         return Status::Pending;

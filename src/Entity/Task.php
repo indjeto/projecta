@@ -104,12 +104,7 @@ class Task implements SoftDeletableInterface
             return $this;
         }
 
-        $oldProject = $this->project;
-
-        $this->project = $project;
-
-        $oldProject?->recalcDuration();
-        $oldProject?->recalcStatus();
+       $this->project = $project;
 
         $this->project?->recalcDuration();
         $this->project?->recalcStatus();

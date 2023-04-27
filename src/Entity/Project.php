@@ -97,8 +97,6 @@ class Project implements SoftDeletableInterface
         }
         $this->duration = $sum;
 
-        $this->recalcStatus();
-
         return $this;
     }
 

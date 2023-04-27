@@ -62,7 +62,7 @@ class TaskController extends AbstractFOSRestController
     public function edit(Request $request, Task $task, TaskRepository $taskRepository, ValidatorInterface $validator): Response
     {
         $task = $this->serializer->deserialize($request->getContent(), Task::class, 'json', [AbstractNormalizer::OBJECT_TO_POPULATE => $task]);
-        //dd($task);
+
         $violations = $validator->validate($task);
         if (0 !== count($violations)) {
             throw new ValidationViolationException($violations);
