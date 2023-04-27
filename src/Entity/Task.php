@@ -5,11 +5,11 @@ namespace App\Entity;
 use App\Repository\TaskRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TaskRepository::class)]
-#[Gedmo\SoftDeleteable(hardDelete: false)]
+#[ORM\Index(fields: ["deletedAt"])]
+#[ORM\Index(fields: ["status"])]
 class Task implements SoftDeletableInterface
 {
     use SoftDeleteTrait;

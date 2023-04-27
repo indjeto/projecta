@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Project;
 use App\Entity\Task;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -40,6 +41,11 @@ class TaskRepository extends ServiceEntityRepository
     {
         $entity->setDeleted(true);
         $this->save($entity, $flush);
+        
+        $project = $entity->getProject();
+        $project->recalcStatus();
+        $project->recalcDuration();
+        $this->getEntityManager()->getRepository(Project::class)->save($project, $flush);
     }
 
     public function getPaginated(int $page): PaginationInterface

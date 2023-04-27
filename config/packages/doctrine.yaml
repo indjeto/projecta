@@ -17,8 +17,8 @@ doctrine:
                 prefix: 'App\Entity'
                 alias: App
         filters:
-            softdeleteable:
-                class: Gedmo\SoftDeleteable\Filter\SoftDeleteableFilter
+            softdeleted:
+                class: App\Orm\Filter\SoftDeletedFilter
                 enabled: true
 
 when@test:
